@@ -1,7 +1,9 @@
-from tabnanny import verbose
-from turtle import color
-from django.db import models
+from dataclasses import fields
+from unicodedata import name
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
+from django.db import models
+from django.db.models import UniqueConstraint
 
 User = get_user_model()
 
@@ -61,3 +63,44 @@ class Tag(models.Model):
     
     def __str__(self):
         return self.name
+
+class Ingredients(models.Model):
+
+    name = models.CharField(
+        'Название',
+        max_length=100
+    )
+    measurement_unit = models.CharField(
+        'Единици измерения',
+        max_length=200
+    )
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
+
+class RecipeIngredient(models.Model):
+
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт'
+    )
+    ingredient = models.ForeignKey(
+        Ingredients,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт'
+    )
+    amount = models.IntegerField(
+        'Количество',
+        validators=[MinValueValidator(1)]
+    )
+
+    class Meta:
+        constrains = [
+            UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique_recipe_ingredient'
+            )
+        ]
