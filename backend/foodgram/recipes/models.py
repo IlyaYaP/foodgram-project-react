@@ -1,5 +1,4 @@
-from dataclasses import fields
-from unicodedata import name
+from tabnanny import verbose
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -34,10 +33,24 @@ class Recipe(models.Model):
         'Время публикации',
         auto_now_add=True,
     )
+    ingredients = models.ManyToManyField(
+        'Ingredients',
+        through='RecipIngredient',
+        verbose_name='Ингредиенты'
+    )    
+    tags = models.ManyToManyField(
+        'Tag',
+        through='RecipeTag',
+        verbose_name='Теги',
+        related_name='tags'
+    )
+    class Meta:
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
+        ordering = ('-pub_date',)
 
-    #ingredients = models.ManyToManyField(
-        
-    #tags = 
+    def __str__(self):
+        return self.name
 
 class Tag(models.Model):
     name = models.CharField(
@@ -104,3 +117,67 @@ class RecipeIngredient(models.Model):
                 name='unique_recipe_ingredient'
             )
         ]
+
+class RecipeTag(models.Model):
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт'
+    )
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        verbose_name='Тег'
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['recipe', 'tag'],
+                name='unique_recipe_tag'
+        )
+    ]
+
+class ShoppingList(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='shopping_list'
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+        related_name='shopping_list'
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['recipe', 'user'],
+                name='unique_user_shoppinglis'
+            )
+    ]
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='favorites',
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+        related_name='favorites',
+    )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['recipe', 'user'],
+                name='unique_user_favorite'
+            )
+    ]
