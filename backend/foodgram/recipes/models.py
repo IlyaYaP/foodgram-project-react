@@ -35,7 +35,7 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         'Ingredients',
-        through='RecipIngredient',
+        through='RecipeIngredient',
         verbose_name='Ингредиенты'
     )    
     tags = models.ManyToManyField(
@@ -111,7 +111,7 @@ class RecipeIngredient(models.Model):
     )
 
     class Meta:
-        constrains = [
+        constraints = [
             UniqueConstraint(
                 fields=['recipe', 'ingredient'],
                 name='unique_recipe_ingredient'
