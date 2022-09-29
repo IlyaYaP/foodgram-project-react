@@ -211,7 +211,7 @@ class ShowFavoriteSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'image', 'cooking_time']
 
 
-class ShoppingCartSerializer(serializers.ModelSerializer):
+class ShoppingListSerializer(serializers.ModelSerializer):
     """ Сериализатор для списка покупок. """
 
     class Meta:
