@@ -22,17 +22,18 @@ class User(AbstractUser):
         'Юзернейм',
         max_length=150,
     )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     class Meta:
         verbose_name = 'Пользователь'
-        verbose_name_pular = 'Пользователи'
         ordering = ['-pk']
     
     def __str__(self):
         return self.username[:30]
 
 
-class Subscription(models.model):
+class Subscription(models.Model):
     user = models.ForeignKey(
         User,
         related_name='follower',

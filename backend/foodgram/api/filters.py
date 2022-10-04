@@ -1,5 +1,3 @@
-from crypt import methods
-from pyexpat import model
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework.filters import (AllValuesMultipleFilter,
                                                    BooleanFilter)
@@ -15,13 +13,13 @@ class IngredientFilters(SearchFilter):
 class RecipeFilterSet(FilterSet):
     tags = AllValuesMultipleFilter(field_name='tags__slug')
     is_favorited = BooleanFilter(method='get_is_favorited')
-    is_in_shoppinf_list = BooleanFilter(
+    is_in_shopping_list = BooleanFilter(
         method='get_is_in_shopping_list'
     )
 
     class Meta:
         model = Recipe
-        fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_list')
+        fields = ['author', 'tags', 'is_favorited', 'is_in_shopping_list']
     
     def get_is_favorited(self, queryset, name, value):
         if self.request.user.is_authenticated and value:

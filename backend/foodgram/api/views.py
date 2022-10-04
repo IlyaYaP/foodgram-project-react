@@ -1,13 +1,8 @@
-from multiprocessing import context
-from pyexpat import model
-from django.db.models import Sum
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from jmespath import search
-from requests import Response, delete
+
+from requests import Response
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 
@@ -21,7 +16,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .filters import IngredientFilters, RecipeFilterSet
 from .pagination import CustomPagination
-from .permissions import IsAuthorOrAdminOrReadOnly, IsAdminOrReadOnly
+from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (RecipeCreateSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingListSerializer, ShowSubscriptionSerializers,
