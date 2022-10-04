@@ -6,52 +6,6 @@ from django.db.models import UniqueConstraint
 
 User = get_user_model()
 
-class Recipe(models.Model):
-    """ Модель рецепта. """
-
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='recipes',
-        verbose_name='Автор рецепта',
-    )
-    name = models.CharField(
-        'Название рецепта',
-        max_length=200
-    )
-    image = models.ImageField(
-        'Изоброжение',
-        upload_to='recipes/images/'
-    )
-    description = models.TextField(
-        'Описание рецепта'
-    )
-    cooking_time = models.PositiveIntegerField(
-        verbose_name='Время приготовления'
-    )
-    pub_date = models.DateField(
-        'Время публикации',
-        auto_now_add=True,
-    )
-    ingredients = models.ManyToManyField(
-        'Ingredients',
-        through='RecipeIngredient',
-        verbose_name='Ингредиенты'
-    )    
-    tags = models.ManyToManyField(
-        'Tag',
-        through='RecipeTag',
-        verbose_name='Теги',
-        related_name='tags'
-    )
-    class Meta:
-        verbose_name = 'Рецепт'
-        verbose_name_plural = 'Рецепты'
-        ordering = ('-pub_date',)
-
-    def __str__(self):
-        return self.name
-
 class Tag(models.Model):
     name = models.CharField(
         'Тег',
@@ -92,6 +46,55 @@ class Ingredients(models.Model):
         ordering = ['name']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+
+
+class Recipe(models.Model):
+    """ Модель рецепта. """
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='recipes',
+        verbose_name='Автор рецепта',
+    )
+    name = models.CharField(
+        'Название рецепта',
+        max_length=200
+    )
+
+    image = models.ImageField(
+        'Изоброжение',
+        upload_to='recipes/images/'
+    )
+    description = models.TextField(
+        'Описание рецепта'
+    )
+    cooking_time = models.PositiveIntegerField(
+        verbose_name='Время приготовления'
+    )
+    pub_date = models.DateField(
+        'Время публикации',
+        auto_now_add=True,
+    )
+    ingredients = models.ManyToManyField(
+        Ingredients,
+        through='RecipeIngredient',
+        verbose_name='Ингредиенты'
+    )    
+    tags = models.ManyToManyField(
+        Tag,
+        through='RecipeTag',
+        verbose_name='Теги',
+        related_name='tags'
+    )
+    class Meta:
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
+        ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.name
+
 
 class RecipeIngredient(models.Model):
 
