@@ -1,37 +1,34 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 
 from requests import Response
 from rest_framework import status, viewsets
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-
 
 
 from recipes.models import (Recipe, Ingredients, RecipeIngredient,
-                            Favorite, ShoppingList, Tag)
-from users.models import Subscription, User
+                            Favourite, ShoppingList, Tag)
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
-from .filters import IngredientFilters, RecipeFilterSet
+from .filters import IngredientFilter, RecipeFilter
 from .pagination import CustomPagination
-from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (RecipeCreateSerializer, FavoriteSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingListSerializer, ShowSubscriptionSerializers,
-                          SubscriptionSerializre, TagSerializer)
+from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
+from api.serializers import (RecipeCreateSerializer, RecipeShortSerializer,
+                          IngredientSerializer, RecipeShowSerializer, TagSerializer)
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthorOrAdminOrReadOnly,]
+    permission_classes = [IsAuthorOrReadOnly | IsAdminOrReadOnly,]
     pagination_class = CustomPagination
     queryset = Recipe.objects.all()
     filter_backends = [DjangoFilterBackend,]
-    filterset_class = RecipeFilterSet
+    filterset_class = RecipeFilter
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return RecipeSerializer
+            return RecipeShowSerializer
         return RecipeCreateSerializer
     
     def get_serializer_context(self):
@@ -46,9 +43,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def favorite(self, request, pk):
         if request.method == 'POST':
-            return self.add(Favorite, request.user, pk)
+            return self.add(Favourite, request.user, pk)
         else:
-            return self.delete(Favorite, request.user, pk)
+            return self.delete(Favourite, request.user, pk)
     
     @action(
         detail=True,
@@ -66,32 +63,56 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, id=pk)
         model.objects.create(user=user, recipe=recipe)
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeShortSerializer(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    def delete(self, modelr, user, pk):
+    def delete(self, model, user, pk):
         obj = model.objects.filter(user=user, recipe__id=pk)
         if obj.exists():
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(
+        detail=False,
+        permission_classes=[IsAuthenticated]
+    )
+    def download_shopping_list(self, request):
+        ingredient_list = 'Список покупок:'
+        ingredients = RecipeIngredient.objects.filter(
+            recipe__shopping_list__user=request.user
+        ).values(
+            'ingredient__name', 'ingredient__measurement_unit'
+        ).annotate(amount=Sum('amount'))
+        for num, i in enumerate(ingredients):
+            ingredient_list += (
+                f"\n{i['ingredient__name']} - "
+                f"{i['amount']} {i['ingredient__measurement_unit']}"
+            
+            )
+            if num < ingredients.count() - 1:
+                ingredient_list += ', '
+        file = 'shopping_list'
+        response = HttpResponse(ingredient_list, 'Content-Type: application/pdf')
+        response['Contetnt-Disposition'] = f'attachment; filename="{file}.pdf"'
+        return response 
 
 
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAdminOrReadOnly,]
     pagination_class = None
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAdminOrReadOnly,]
     pagination_class = None
     serializer_class = IngredientSerializer
     queryset = Ingredients.objects.all()
-    filter_backends = [IngredientFilters,]
+    filter_backends = [DjangoFilterBackend,]
+    filterset_class = IngredientFilter
     search_fields = ['^name',]
 
-#class FavoriteViewSet(viewsets.ModelViewSet):

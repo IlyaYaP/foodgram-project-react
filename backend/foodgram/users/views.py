@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 from api.pagination import CustomPagination
-from api.serializers import SubscriptionSerializre, CustomUserSerializer
+from api.serializers import SubscriptionSerializer, CustomUserSerializer
 from django.contrib.auth import get_user_model
 from djoser.views import UserViewSet
 from rest_framework.response import Response
@@ -31,7 +31,7 @@ class CustomUserViewSet(UserViewSet):
         author = get_object_or_404(User, id=author_id)
 
         if request.method == 'POST':
-            serializer = SubscriptionSerializre(author,
+            serializer = SubscriptionSerializer(author,
                                                 data=request.data,
                                                 context={'request': request})
             serializer.is_valid(raise_exception=True)
@@ -53,7 +53,7 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         queryset = User.objects.filter(subscribing__user=user)
         pages = self.paginate_queryset(queryset)
-        serializer = SubscriptionSerializre(pages,
+        serializer = SubscriptionSerializer(pages,
                                             many=True,
                                             context={'request': request})
         return self.get_paginated_response(serializer.data)

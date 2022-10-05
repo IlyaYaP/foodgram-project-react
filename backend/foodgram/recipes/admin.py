@@ -1,14 +1,31 @@
 from django.contrib import admin
 
-from .models import Recipe, Ingredients, ShoppingList, Tag, Favorite, User
+from .models import Recipe, Ingredients, ShoppingList, Tag, Favourite, RecipeIngredient
 
 
-class IngredientsInLine(admin.TabularInline):
-    model = Recipe.ingredients.through
+@admin.register(Recipe)
+class RecipeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'id', 'author',)
+    
+    list_filter = ('author', 'name', 'tags')
 
-#admin.site.register(User)
-admin.site.register(Recipe)
-admin.site.register(Ingredients)
-admin.site.register(ShoppingList)
-admin.site.register(Tag)
-admin.site.register(Favorite)
+@admin.register(Ingredients)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = ('name', 'measurement_unit',)
+    list_filter = ('name',)
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'slug',)
+
+@admin.register(RecipeIngredient)
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    list_display = ('recipe', 'ingredient', 'amount',)
+
+@admin.register(Favourite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
+
+@admin.register(ShoppingList)
+class ShoppingListAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
