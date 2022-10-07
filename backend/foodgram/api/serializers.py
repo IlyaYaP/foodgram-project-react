@@ -18,21 +18,21 @@ class CustomUserSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'id',
+        fields = (
             'email',
+            'id',
             'username',
             'first_name',
             'last_name',
-            'is_subscrided'
-        ]
+            'is_subscribed',
+        )
 
-    def get_is_subscrided(self, obj):
-        request = self.context.get('request')
-        if request in None or request.user.is_anonymous:
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request').user
+        if user.is_anonymous:
             return False
         return Subscription.objects.filter(
-            user=request.user, author=obj
+            user=user, author=obj
         ).exists()
 
 
@@ -70,13 +70,15 @@ class IngredientSerializer(ModelSerializer):
         ]
 
 
-class SubscriptionSerializer(CustomUserSerializer):
+class SubscribeSerializer(CustomUserSerializer):
     recipes_count = SerializerMethodField()
     recipes = SerializerMethodField()
 
     class Meta(CustomUserSerializer.Meta):
-        
-        reade_only_fields = ('email', 'username')
+        fields = CustomUserSerializer.Meta.fields + (
+            'recipes_count', 'recipes'
+        )
+        read_only_fields = ('email', 'username')
     
     def validate(self, data):
         author = self.instance

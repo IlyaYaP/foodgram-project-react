@@ -37,13 +37,13 @@ class User(AbstractUser):
 class Subscription(models.Model):
     user = models.ForeignKey(
         User,
-        related_name='follower',
+        related_name='subscriber',
         on_delete=models.CASCADE,
         verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
-        related_name='author',
+        related_name='subscribing',
         on_delete=models.CASCADE,
         verbose_name='Автор'
     )
@@ -52,7 +52,7 @@ class Subscription(models.Model):
         constraints = [
             UniqueConstraint(
                 fields=['user', 'author'],
-                name='unique_user_author'
+                name='unique_subscription'
             )
         ]
     def __str__(self):
