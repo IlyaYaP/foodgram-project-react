@@ -1,8 +1,21 @@
+from enum import unique
+from tabnanny import verbose
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import F, Q
+
+class UserRole:
+    USER = 'user'
+    ADMIN = 'admin'
+    choices = [
+        (USER, 'USER'),
+        (ADMIN, 'ADMIN')
+    ]
 
 class User(AbstractUser):
+    username_validator = UnicodeUsernameValidator()
+
     email = models.EmailField(
         'Почта',
         max_length=254,
@@ -19,8 +32,15 @@ class User(AbstractUser):
         blank=True
     )
     username = models.CharField(
-        'Юзернейм',
         max_length=150,
+        unique=True,
+        validators=[username_validator],
+        verbose_name='Username'
+    )
+    role = models.TextField(
+        choices=UserRole.choices,
+        default=UserRole.USER,
+        verbose_name='Пользовательская роль'
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -28,32 +48,38 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ['id']
+        ordering = ('id',)
     
     def __str__(self):
-        return self.username[:30]
+        return self.username
 
 
 class Subscription(models.Model):
     user = models.ForeignKey(
         User,
-        related_name='subscriber',
+        related_name='follower',
         on_delete=models.CASCADE,
         verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
-        related_name='subscribing',
+        related_name='author',
         on_delete=models.CASCADE,
-        verbose_name='Автор'
+        verbose_name='Автор рецепта',
     )
 
     class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
         constraints = [
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=['user', 'author'],
                 name='unique_subscription'
-            )
+            ),
+            models.CheckConstraint(
+                check=~Q(user=F('author')),
+                name='self_subscription',
+            ),
         ]
     def __str__(self):
         return f'Пользователь {self.user} подписалься на {self.author}'
