@@ -6,12 +6,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ../infra/.env
     restart: always
 
   backend:
     build:
-      context: ../backend
+      context: ../backend/foodgram
       dockerfile: Dockerfile
     restart: always
     volumes:
@@ -21,16 +21,16 @@ services:
     depends_on:
       - db
     env_file:
-      - ./.env
+      - ../infra/.env
 
 
   frontend:
-    image: infra-frontend:latest
-    # build:
-    #   context: ../frontend
-    #   dockerfile: Dockerfile
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
+
 
 
   nginx:
@@ -48,6 +48,7 @@ services:
       - redoc:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend
+      - frontend
     restart: always
 
 volumes:
