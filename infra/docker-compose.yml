@@ -10,9 +10,7 @@ services:
     restart: always
 
   backend:
-    build:
-      context: ../backend/foodgram
-      dockerfile: Dockerfile
+    image: socspec/backend:v1
     restart: always
     volumes:
       - static_value:/app/static/
@@ -25,12 +23,9 @@ services:
 
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: socspec/frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
-
 
 
   nginx:
