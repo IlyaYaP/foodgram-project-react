@@ -51,4 +51,3 @@ volumes:
   media_value:
   postgres_data:
   redoc:
-#
