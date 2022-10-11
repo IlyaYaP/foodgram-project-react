@@ -25,7 +25,7 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 
 
 class RecipeViewSet(ModelViewSet):
-    permission_classes = (IsAuthorOrAdminOrReadOnly | IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthorOrAdminOrReadOnly, IsAuthenticatedOrReadOnly)
     pagination_class = CustomPagination
     queryset = Recipe.objects.all()
     filter_backends = (DjangoFilterBackend,)
