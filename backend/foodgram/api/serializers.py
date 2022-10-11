@@ -2,14 +2,14 @@ from django.db.transaction import atomic
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserSerializer
 from drf_base64.fields import Base64ImageField
+from recipes.models import (Favourite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from rest_framework.serializers import (IntegerField, ModelSerializer,
                                         PrimaryKeyRelatedField,
                                         SerializerMethodField,
                                         SlugRelatedField, ValidationError)
-
-from recipes.models import (ShoppingCart, Favourite, Ingredient, RecipeIngredient,
-                            Recipe, Tag)
 from users.models import Subscription, User
+
 
 class CustomUserSerializer(UserSerializer):
     is_subscribed = SerializerMethodField(read_only=True)
@@ -43,6 +43,7 @@ class TagSerializer(ModelSerializer):
             'color',
             'slug'
         ]
+
 
 class IngredientSerializer(ModelSerializer):
 
@@ -78,7 +79,6 @@ class SubscriptionsSerializer(ModelSerializer):
             'email', 'id', 'username', 'first_name', 'last_name',
             'is_subscribed', 'recipes', 'recipes_count'
         )
-    
 
     def get_recipes_count(self, author):
         return Recipe.objects.filter(author=author).count()
@@ -130,6 +130,7 @@ class SubscribeSerializer(ModelSerializer):
             context={'request': self.context.get('request')}
         ).data
 
+
 class RecipeIngredientsSerializer(ModelSerializer):
     id = PrimaryKeyRelatedField(
         source='ingredient',
@@ -166,7 +167,6 @@ class RecipeSerializer(ModelSerializer):
     )
     is_favorited = SerializerMethodField(read_only=True)
     is_in_shopping_cart = SerializerMethodField(read_only=True)
-    
 
     class Meta:
         model = Recipe
@@ -252,7 +252,7 @@ class RecipeCreateSerializer(ModelSerializer):
             'text',
             'cooking_time'
         ]
-    
+
     def create_ingredients(self, recipe, ingredients):
         RecipeIngredient.objects.bulk_create([
             RecipeIngredient(
@@ -277,7 +277,7 @@ class RecipeCreateSerializer(ModelSerializer):
                 'Время приготовления должно быть больше 0!'
             )
         return data
-    
+
     @atomic
     def create(self, validated_data):
         request = self.context.get('request')

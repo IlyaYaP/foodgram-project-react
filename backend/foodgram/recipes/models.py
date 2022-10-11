@@ -1,9 +1,7 @@
-from cgitb import text
 from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import UniqueConstraint
 
 User = get_user_model()
 
@@ -29,9 +27,10 @@ class Tag(models.Model):
         ordering = ['name']
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
-    
+
     def __str__(self):
         return self.name
+
 
 class Ingredient(models.Model):
 
@@ -49,7 +48,7 @@ class Ingredient(models.Model):
         ordering = ['name']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-    
+
     def __str__(self):
         return f'{self.name}, {self.measurement_unit}'
 
@@ -89,11 +88,12 @@ class Recipe(models.Model):
         Ingredient,
         through='RecipeIngredient',
         verbose_name='Ингредиенты в рецепте',
-    )    
+    )
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Теги',
     )
+
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
@@ -133,13 +133,12 @@ class RecipeIngredient(models.Model):
         )
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецепте'
-    
-    def __str__(self):
-        return(
-            f'{self.ingredient.name} ({self.ingredient.measurement_unit})'
-            f' - {self.amount}' 
-        )
 
+    def __str__(self):
+        return (
+            f'{self.ingredient.name} ({self.ingredient.measurement_unit})'
+            f' - {self.amount}'
+        )
 
 
 class ShoppingCart(models.Model):
@@ -161,8 +160,10 @@ class ShoppingCart(models.Model):
                 name='unique_cart',
             ),
         )
+
     def __str__(self):
         return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
+
 
 class Favourite(models.Model):
     user = models.ForeignKey(

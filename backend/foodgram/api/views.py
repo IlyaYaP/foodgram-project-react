@@ -3,34 +3,33 @@ from datetime import datetime
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.template.loader import render_to_string
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favourite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from users.models import Subscription, User
 
 from .filters import IngredientSearchFilter, RecipeFilterSet
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (ShoppingCartSerializer, RecipeCreateSerializer,
-                          FavoriteSerializer, SubscriptionsSerializer,
-                          SubscribeSerializer, IngredientSerializer,
-                          RecipeSerializer, TagSerializer)
-from recipes.models import (ShoppingCart, Favourite, Ingredient, RecipeIngredient,
-                            Recipe, Tag)
-from users.models import Subscription, User
+from .serializers import (FavoriteSerializer, IngredientSerializer,
+                          RecipeCreateSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, SubscribeSerializer,
+                          SubscriptionsSerializer, TagSerializer)
 
 
 class RecipeViewSet(ModelViewSet):
-    permission_classes = [IsAuthorOrAdminOrReadOnly | IsAuthenticatedOrReadOnly,]
+    permission_classes = (IsAuthorOrAdminOrReadOnly |
+                          IsAuthenticatedOrReadOnly,)
     pagination_class = CustomPagination
     queryset = Recipe.objects.all()
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilterSet
     serializer_class = RecipeSerializer
 
@@ -65,14 +64,13 @@ class RecipeViewSet(ModelViewSet):
     def delete_shopping_cart(self, request, pk):
         return self.delete_method_for_actions(
             request=request, pk=pk, model=ShoppingCart)
-    
 
     @action(
         detail=False, methods=['get'], permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
         user = request.user
-        
+
         ingredients = RecipeIngredient.objects.filter(
             recipe__shoppingcart__user=request.user
         ).values(
@@ -161,4 +159,3 @@ class IngredientViewSet(ModelViewSet):
 class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
