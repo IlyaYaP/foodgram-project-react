@@ -1,5 +1,3 @@
-from enum import unique
-from tabnanny import verbose
 
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -14,6 +12,7 @@ class UserRole:
         (USER, 'USER'),
         (ADMIN, 'ADMIN')
     ]
+
 
 class User(AbstractUser):
     username_validator = UnicodeUsernameValidator()
@@ -51,7 +50,7 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         ordering = ('id',)
-    
+
     def __str__(self):
         return self.username
 
@@ -83,5 +82,6 @@ class Subscription(models.Model):
                 name='self_subscription',
             ),
         ]
+
     def __str__(self):
         return f'Пользователь {self.user} подписалься на {self.author}'

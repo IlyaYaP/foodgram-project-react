@@ -7,7 +7,6 @@ from .models import (Favourite, Ingredient, Recipe, RecipeIngredient,
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'id', 'in_favorite',)
-    
     list_display_links = ('name',)
     search_fields = ('name',)
     list_filter = ('author', 'name', 'tags')

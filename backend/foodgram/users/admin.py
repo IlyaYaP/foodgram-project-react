@@ -12,6 +12,7 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ['username']
     empty_value_dispaly = 'Пусто'
 
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ['user', 'author']
