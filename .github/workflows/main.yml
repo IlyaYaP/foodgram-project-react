@@ -69,3 +69,4 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:v1
+          #
