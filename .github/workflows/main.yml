@@ -69,7 +69,7 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:v1
-          #
+          
   deploy:
     name: Deploying on remote server
     runs-on: ubuntu-latest
