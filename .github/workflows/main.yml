@@ -85,7 +85,8 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          script: |       
+          script: |
+            sudo systemctl stop nginx    
             sudo touch .env
             sudo chmod 666 .env
             
