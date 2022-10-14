@@ -15,6 +15,8 @@ class UserRole:
 
 
 class User(AbstractUser):
+    """ Кастомная модель пользователя. """
+
     username_validator = UnicodeUsernameValidator()
 
     email = models.EmailField(
@@ -56,6 +58,8 @@ class User(AbstractUser):
 
 
 class Subscription(models.Model):
+    """ Модель подписок. """
+
     user = models.ForeignKey(
         User,
         related_name='follower',

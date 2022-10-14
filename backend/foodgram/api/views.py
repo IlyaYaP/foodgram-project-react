@@ -25,6 +25,9 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 
 
 class RecipeViewSet(ModelViewSet):
+    """ Методы работы с рецептом. Добавление, удаление,
+        а так же методы работы с корзиной покупок.  """
+
     permission_classes = (IsAuthorOrAdminOrReadOnly, IsAuthenticatedOrReadOnly)
     pagination_class = CustomPagination
     queryset = Recipe.objects.all()
@@ -107,6 +110,8 @@ class RecipeViewSet(ModelViewSet):
 
 
 class UsersViewSet(UserViewSet):
+    """ Отображение страницы юзера. Операция подписки/отписки. """
+
     pagination_class = CustomPagination
 
     @action(['get'], detail=False, permission_classes=[IsAuthenticated])
@@ -149,6 +154,8 @@ class UsersViewSet(UserViewSet):
 
 
 class IngredientViewSet(ModelViewSet):
+    """ Отображение ингредиентов. """
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = (IngredientSearchFilter,)
@@ -156,5 +163,7 @@ class IngredientViewSet(ModelViewSet):
 
 
 class TagViewSet(ModelViewSet):
+    """ Отображение тегов. """
+
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
