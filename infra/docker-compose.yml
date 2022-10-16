@@ -29,7 +29,7 @@ services:
       - backend
 
   nginx:
-    image: nginx:1.19.3-alpine
+    image: nginx:1.19.3
     ports:
       - "80:80"
       - "443:443"
@@ -39,7 +39,6 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-      #- redoc:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend
       - frontend
