@@ -42,9 +42,14 @@ sudo docker compose exec backend python manage.py createsuperuser
 ```
 https://console.cloud.yandex.ru
 ```
-Публичный IP:
+Проект доступен по адресу:
 ```
-84.201.175.127
+http://51.250.81.74/
+```
+Данные суперпользователя:
+```
+email: admin@ya.ru
+password: admin
 ```
 ### Разработчики проекта(backend):
 
