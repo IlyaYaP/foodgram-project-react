@@ -25,6 +25,7 @@ const AccountMenu = ({ onSignOut }) => {
       className={styles.menuLink}
       href='/change-password'
       title='Изменить пароль'
+      test_id = 'change-password'
     />
     <a
       className={styles.menuLink}
