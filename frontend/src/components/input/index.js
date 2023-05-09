@@ -39,7 +39,7 @@ const Input = ({
         {label}
       </div>}
       <input
-        id=''
+        id={id}
         type={type}
         required={required}
         name={name}
