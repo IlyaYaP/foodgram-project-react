@@ -16,7 +16,8 @@ const Input = ({
     required,
     onFocus,
     onBlur,
-    value = ''
+    value = '',
+    id
   }) => {
 
   const [ inputValue, setInputValue ] = useState(value)
