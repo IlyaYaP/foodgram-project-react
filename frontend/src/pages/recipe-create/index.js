@@ -110,7 +110,7 @@ const RecipeCreate = ({ onEdit }) => {
         }}
       >
         <Input
-          id = 'data_test'
+          data_test = 'recipe_create'
           label='Название рецепта'
           onChange={e => {
             const value = e.target.value

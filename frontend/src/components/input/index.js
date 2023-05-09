@@ -17,7 +17,7 @@ const Input = ({
     onFocus,
     onBlur,
     value = '',
-    id
+    data_test
   }) => {
 
   const [ inputValue, setInputValue ] = useState(value)
@@ -39,7 +39,7 @@ const Input = ({
         {label}
       </div>}
       <input
-        id={id}
+        data_test={data_test}
         type={type}
         required={required}
         name={name}
