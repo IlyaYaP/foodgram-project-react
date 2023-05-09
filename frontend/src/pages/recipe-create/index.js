@@ -218,6 +218,7 @@ const RecipeCreate = ({ onEdit }) => {
         </div>
         <Textarea
           label='Описание рецепта'
+          data_test = 'recipe_create'
           onChange={e => {
             const value = e.target.value
             setRecipeText(value)

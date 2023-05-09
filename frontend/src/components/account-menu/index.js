@@ -20,7 +20,7 @@ const AccountMenu = ({ onSignOut }) => {
       />
     </div>
   }
-  return <div className={styles.menu} id = 'change-password'>
+  return <div className={styles.menu}>
     <LinkComponent
       className={styles.menuLink}
       href='/change-password'
