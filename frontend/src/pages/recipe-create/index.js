@@ -205,6 +205,7 @@ const RecipeCreate = ({ onEdit }) => {
         </div>
         <div className={styles.cookingTime}>
           <Input
+            data_test = 'recipe_create'
             label='Время приготовления'
             className={styles.ingredientsTimeInput}
             labelClassName={styles.cookingTimeLabel}
@@ -218,6 +219,7 @@ const RecipeCreate = ({ onEdit }) => {
           <div className={styles.cookingTimeUnit}>мин.</div>
         </div>
         <Textarea
+          data_test='recipe_create'
           label='Описание рецепта'
           onChange={e => {
             const value = e.target.value
