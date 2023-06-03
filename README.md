@@ -43,6 +43,10 @@ docker-compose exec backend python manage.py collectstatic --noinput
 docker-compose exec backend python manage.py load_ingredients
 docker-compose exec backend python manage.py createsuperuser
 ```
+Проект доступен по адресу:
+```
+http://localhost/
+```
 
 # Развертывание проекта на удаленном сервере
  - Склонируйте репозиторий. 
