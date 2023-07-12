@@ -109,4 +109,4 @@ jobs:
   #           sudo docker compose exec backend python manage.py migrate
   #           sudo docker compose exec backend python manage.py collectstatic --noinput
   #           sudo docker compose exec backend python manage.py load_ingredients
-#@
+#@@
