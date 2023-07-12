@@ -81,10 +81,10 @@ jobs:
       - name: docker-compose up
         run: docker compose -f ./infra/docker-compose.yml up -d
       # - uses: isbang/compose-action@v1.4.1
-        # with:
+          with:
         #   compose-file: docker-compose.yml
         #   # down-flags: --volumes
-        #   env_file: .env
+            env_file: .env
           # env:
           #   DB_ENGINE=django.db.backends.postgresql
           #   DB_NAME=postgres
