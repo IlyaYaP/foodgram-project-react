@@ -80,9 +80,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: ./infra/docker-compose.yml
+          compose-file: docker-compose.yml
           # down-flags: --volumes
-          # env_file: ./infra/.env
+          env_file: .env
           # env:
           #   DB_ENGINE=django.db.backends.postgresql
           #   DB_NAME=postgres
