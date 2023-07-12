@@ -10,7 +10,7 @@ services:
     restart: always
 
   backend:
-    image: socspec/backend:v1
+    image: socspec/backend:latest
     restart: always
     volumes:
       - static_value:/app/static/
@@ -24,7 +24,7 @@ services:
 
 
   frontend:
-    image: socspec/frontend:v1
+    image: socspec/frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:

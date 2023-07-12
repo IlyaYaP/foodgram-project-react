@@ -46,7 +46,7 @@ jobs:
         with:
           context: ./backend/foodgram/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
   build_and_push_frontend_to_docker_hub:
     name: Pushing frontend image to Docker Hub
@@ -68,7 +68,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
   deploy:
     name: run docker-compose
