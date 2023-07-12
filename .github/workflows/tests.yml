@@ -78,7 +78,8 @@ jobs:
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: "./infra/docker-compose.yml"
-          script: |
+          down-flags: "--volumes"
+          services: |
             sudo docker-compose up -d
 
 
