@@ -73,16 +73,16 @@ jobs:
   deploy:
     name: run docker-compose
     runs-on: ubuntu-latest
-    needs:
-      - build_and_push_backend_to_docker_hub
-      - build_and_push_frontend_to_docker_hub
+    # needs:
+    #   - build_and_push_backend_to_docker_hub
+    #   - build_and_push_frontend_to_docker_hub
     steps:
       - uses: actions/checkout@v3
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: ./infra/docker-compose.yml
           down-flags: --volumes
-          env_file: ./.env
+          env_file: ./infra/.env
           services: |
             sudo docker-compose up -d
 
