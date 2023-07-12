@@ -83,7 +83,7 @@ jobs:
           compose-file: ./infra/docker-compose.yml
           down-flags: --volumes
           # env_file: ./infra/.env
-          environment:
+          env:
             DB_ENGINE=django.db.backends.postgresql
             DB_NAME=postgres
             POSTGRES_USER=postgres
