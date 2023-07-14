@@ -18,4 +18,5 @@ jobs:
         with:
           python-version: 3.8
       - name: docker-compose up
-        run: docker-compose -f ./infra/docker-compose.yml --env-file .env logs
+        run: docker-compose --file ./infra/docker-compose.yml up 
+        # --env-file .env logs
