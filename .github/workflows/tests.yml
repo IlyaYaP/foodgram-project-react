@@ -19,7 +19,7 @@ jobs:
       - name: docker-compose up
         run: docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up -d
       - name: foodgram up
-        run:
+        run: |
           docker-compose exec backend python manage.py migrate
           docker-compose exec backend python manage.py collectstatic --noinput
           docker-compose exec backend python manage.py load_ingredients
