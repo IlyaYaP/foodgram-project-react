@@ -17,4 +17,4 @@ jobs:
         with:
           python-version: 3.8
       - name: docker-compose up
-        run: docker-compose --file ./infra/docker-compose.yml --env-file .env up
+        run: docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up
