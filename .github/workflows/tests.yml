@@ -11,20 +11,11 @@ jobs:
     name: run docker-compose
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Build docker images
-        run: docker compose build
 
-
-
-
-
-
-      # - uses: actions/checkout@v3
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.8
-      # - name: docker-compose up
-      #   run: docker-compose -f ./infra/docker-compose.yml logs
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: docker-compose up
+        run: docker-compose -f ./infra/docker-compose.yml --env-file ./infra/.env logs
