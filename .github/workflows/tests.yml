@@ -11,11 +11,19 @@ jobs:
     name: run docker-compose
     runs-on: ubuntu-latest
     steps:
-
       - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: isbang/compose-action@v1.4.1
         with:
-          python-version: 3.8
-      - name: docker-compose up
-        run: docker-compose --file ./infra/docker-compose.yml --env-file ./.env up
+          compose-file: "./infra/docker-compose.yml"
+        env:
+          CUSTOM_VARIABLE: "test"
+
+
+
+      # - uses: actions/checkout@v3
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.8
+      # - name: docker-compose up
+      #   run: docker-compose --file ./infra/docker-compose.yml --env-file ./.env up
