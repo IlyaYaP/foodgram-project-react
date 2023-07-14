@@ -77,25 +77,10 @@ jobs:
     #   - build_and_push_backend_to_docker_hub
     #   - build_and_push_frontend_to_docker_hub
     steps:
+      - name: Check out the repo
       - uses: actions/checkout@v3
       - name: docker-compose up
         run: docker compose -f ./infra/docker-compose.yml up -d
-      # - uses: isbang/compose-action@v1.4.1
-          with:
-        #   compose-file: docker-compose.yml
-        #   # down-flags: --volumes
-            env_file: .env
-          # env:
-          #   DB_ENGINE=django.db.backends.postgresql
-          #   DB_NAME=postgres
-          #   POSTGRES_USER=postgres
-          #   POSTGRES_PASSWORD=postgres
-          #   DB_HOST=db
-          #   DB_PORT=5432
-          #   SECRET_KEY=12345
-          #   ALLOWED_HOSTS=127.0.0.1
-          # services: |
-          #   sudo docker-compose up -d
 
 
 
