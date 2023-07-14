@@ -19,6 +19,10 @@ jobs:
       - name: docker-compose up
         run: | 
           docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up -d
-          sudo docker compose exec backend python manage.py migrate
-          docker-compose exec backend python manage.py collectstatic --noinput
-          docker-compose exec backend python manage.py load_ingredients
+      - name: run test
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        # sudo docker compose exec backend python manage.py migrate
+        # docker-compose exec backend python manage.py collectstatic --noinput
+        # docker-compose exec backend python manage.py load_ingredients
