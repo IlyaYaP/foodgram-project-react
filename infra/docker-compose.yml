@@ -12,6 +12,10 @@ services:
   backend:
     image: socspec/backend:latest
     restart: always
+    command: |
+        python manage.py migrate
+        python manage.py collectstatic --noinput
+        python manage.py load_ingredients
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
