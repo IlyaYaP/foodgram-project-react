@@ -22,7 +22,8 @@ jobs:
       - name: run test
         run: |
           cd backend/foodgram
-          ls
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
           python manage.py migrate
         # docker-compose exec backend python manage.py collectstatic --noinput
         # docker-compose exec backend python manage.py load_ingredients
