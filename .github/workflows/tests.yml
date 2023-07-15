@@ -21,6 +21,7 @@ jobs:
           docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up -d
       - name: run test
         run: |
+          cd backend/foodgram
           ls
           python manage.py migrate
         # docker-compose exec backend python manage.py collectstatic --noinput
