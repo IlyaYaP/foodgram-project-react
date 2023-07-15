@@ -17,8 +17,9 @@ jobs:
         with:
           python-version: 3.8
       - name: docker-compose up
-        run: | 
-          docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up -d
+        run: |
+          sudo docker compose up -d
+        # docker-compose --file ./infra/docker-compose.yml --env-file ./infra/.env up -d
       - name: run test
         run: |
           cd backend/foodgram
